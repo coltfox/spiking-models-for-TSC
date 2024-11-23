@@ -2,7 +2,7 @@
 # This
 #
 
-import _init_paths
+from . import _init_paths
 
 import numpy as np
 import nengo

@@ -1,4 +1,4 @@
-import _init_paths
+from . import _init_paths
 
 import numpy as np
 from scipy.io import arff

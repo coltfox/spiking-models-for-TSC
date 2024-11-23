@@ -2,7 +2,7 @@
 # This file contains modular helper/util functions for the experiment.
 #
 
-import _init_paths
+from . import _init_paths
 
 import os
 import datetime

@@ -1,4 +1,4 @@
-import _init_paths
+from . import _init_paths
 
 import os
 import pickle
@@ -8,7 +8,7 @@ import sys
 
 from consts.exp_consts import EXC
 from src.extract_signals import ExtractSignals
-from src.pyt_bwise_nspk_net import BWNspkNet
+from src.pyt_lsnn_nspk_model import BWNspkNet
 from utils.base_utils.data_prep_utils import DataPrepUtils
 from utils.base_utils import log
 
@@ -59,7 +59,6 @@ class PTNspkTrainEvalModel(object):
         X, Y = tr_x, tr_y
         log.INFO("Returning training data X, Y of shape: {0}, {1}".format(
                  X.shape, Y.shape))
-        print(X.shape, Y.shape)
       else:
         X, Y = te_x, te_y
         log.INFO("Returning test data X, Y of shape: {0}, {1}".format(
@@ -114,6 +113,8 @@ class PTNspkTrainEvalModel(object):
       batches = self.get_batches_of_x_y_from_ldn_sigs(True, ldn_path=ldn_path)
       batch_losses = []
       for tr_x, tr_y in batches:
+        if (tr_x.shape[0] != self._model._bsize):
+          continue
         output = self._model(tr_x)
         max_otp, _ = torch.max(output, 1)
         log_max_otp = log_softmax(max_otp)
@@ -154,6 +155,8 @@ class PTNspkTrainEvalModel(object):
     self._model.eval() # Set the model in eval() mode. Call train() to train ltr.
     with torch.no_grad():
       for te_x, te_y in batches:
+        if (te_x.shape[0] != self._model._bsize):
+          continue
         output = self._model(te_x)
         all_outputs.append(output)
         max_over_nsteps, _ = torch.max(output, 1) # Max over time.

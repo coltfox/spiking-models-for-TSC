@@ -2,7 +2,7 @@
 # This file does the PyTorch Batchwise Non-Spiking based learning.
 #
 
-import _init_paths
+from . import _init_paths
 
 import argparse
 import numpy as np
@@ -13,7 +13,7 @@ import sys
 from consts.dir_consts import DRC
 from consts.run_time_consts import RTC
 from consts.exp_consts import EXC
-from src.pyt_nspk_train_eval_model import PTNspkTrainEvalModel
+from src.pyt_train_eval_lsnn_nspk import PTNspkTrainEvalModel
 from utils.base_utils import log
 from utils.base_utils.exp_utils import ExpUtils
 
@@ -24,6 +24,7 @@ def run_net(rtc, otp_dir):
   log.INFO("Training done, now finally evaluating on the enitre test set...")
   acc, all_outputs = pnte.evaluate_model(
       num_samples=EXC.NUM_TEST_SAMPLES[args.dataset], ldn_path=otp_dir)
+  print(acc)
   log.INFO("Test accuracy: {}".format(acc))
   pickle.dump(all_outputs, open(otp_dir + "/test_outputs.p", "wb"))
   log.INFO("Performing cleanup...")

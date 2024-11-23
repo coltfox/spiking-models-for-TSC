@@ -1,6 +1,6 @@
 # This file creates a non-spiking LDN.
 
-import _init_paths
+from . import _init_paths
 
 import numpy as np
 from nengo.utils.filter_design import cont2discrete

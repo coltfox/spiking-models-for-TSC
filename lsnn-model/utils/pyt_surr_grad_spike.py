@@ -1,7 +1,7 @@
 #
 # Following file is based on: https://github.com/fzenke/spytorch
 #
-import _init_paths
+from . import _init_paths
 
 import torch
 

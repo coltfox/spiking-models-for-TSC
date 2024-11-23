@@ -2,7 +2,7 @@
 # This file contains the code to prepare the results.
 #
 
-import _init_paths
+from . import _init_paths
 import numpy as np
 import os
 import pickle

@@ -36,6 +36,8 @@ def run_net(rtc, otp_dir):
   os.remove(otp_dir+"/train_Y.p")
   log.INFO("Files removed...Exp Done!")
 
+  return acc
+
 def setup_logging(rtc, otp_dir):
   log.configure_log_handler(
       "%s/pytorch_training_evaluation_%s_%s.log"
@@ -59,8 +61,10 @@ def setup_otp_dir(rtc):
 def call_one_combination(rtc):
   otp_dir = setup_otp_dir(rtc)
   setup_logging(rtc, otp_dir)
-  run_net(rtc, otp_dir)
+  acc = run_net(rtc, otp_dir)
   log.RESET()
+
+  return acc
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -81,6 +85,8 @@ if __name__ == "__main__":
     call_one_combination(RTC)
     sys.exit("One combination experiment done!")
   else:
+    accuracies = []
+
     all_combs = exu.get_combinations_for_lsnn_model(EXC)
     RTC.CONFIG = 0
     for comb in all_combs:
@@ -95,6 +101,12 @@ if __name__ == "__main__":
       RTC.PYTORCH_NEURON_GAIN = comb[4]
       RTC.PYTORCH_NEURON_BIAS = comb[5]
 
-      call_one_combination(RTC)
+      acc = call_one_combination(RTC)
+    
+    max_acc = np.max(accuracies)
+    avg_acc = np.mean(accuracies)
 
     sys.exit("All combination experiments done!")
+
+    print(f"Max accuracy: {max_acc}")
+    print(f"Avg accuracy: {avg_acc}")

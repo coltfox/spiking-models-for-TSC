@@ -1,4 +1,4 @@
-import _init_paths
+from . import _init_paths
 
 import torch
 import numpy as np

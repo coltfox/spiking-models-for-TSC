@@ -2,7 +2,7 @@
 # This file does the L2 regularized Regression fitting over the datasets.
 #
 
-import _init_paths
+from . import _init_paths
 
 import nengo
 import nengo_loihi

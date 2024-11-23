@@ -2,7 +2,7 @@
 # This file implements the non-spiking variant of LSNN.
 #
 
-import _init_paths
+from . import _init_paths
 
 import torch
 import torch.nn as nn

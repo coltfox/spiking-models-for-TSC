@@ -2,7 +2,7 @@
 # This file does the regression fitting of the SLRC model.
 #
 
-import _init_paths
+from . import _init_paths
 
 import argparse
 import numpy as np

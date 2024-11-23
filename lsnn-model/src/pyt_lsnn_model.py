@@ -2,7 +2,7 @@
 # This file implements the LSNN model.
 #
 
-import _init_paths
+from . import _init_paths
 
 import torch
 

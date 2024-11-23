@@ -1,8 +1,7 @@
 #
 # This file does the LSNN and LSNN_nhdn model training and evaluation.
 #
-
-import _init_paths
+from . import _init_paths
 
 import os
 import pickle
@@ -74,7 +73,6 @@ class PTTrainEvalModel(object):
         X, Y = tr_x, tr_y
         log.INFO("Returning training data X, Y of shape: {0}, {1}".format(
                  X.shape, Y.shape))
-        print(X.shape, Y.shape)
       else:
         X, Y = te_x, te_y
         log.INFO("Returning test data X, Y of shape: {0}, {1}".format(
@@ -130,6 +128,8 @@ class PTTrainEvalModel(object):
       batch_losses = []
       for tr_x, tr_y in batches:
         # Output Shape = (batch_size, signal_duration, num_clss)
+        if (tr_x.shape[0] != self._model._bsize):
+          continue
         output = self._model(tr_x)
 
         max_pots, _ = torch.max(output, 1)
@@ -172,6 +172,8 @@ class PTTrainEvalModel(object):
     self._model.eval()
     with torch.no_grad():
       for te_x, te_y in batches:
+        if (te_x.shape[0] != self._model._bsize):
+          continue
         # Output shape: batch_size x duration x num_clss
         output = self._model(te_x)
 

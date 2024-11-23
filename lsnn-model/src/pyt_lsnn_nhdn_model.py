@@ -3,7 +3,7 @@
 # is still meant to be trained with Surrogate GD.
 #
 
-import _init_paths
+from . import _init_paths
 
 import torch
 

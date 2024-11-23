@@ -2,7 +2,7 @@
 # This file extracts and saves Legendre signals from different datasets.
 #
 
-import _init_paths
+from . import _init_paths
 
 import nengo
 import nengo_loihi
