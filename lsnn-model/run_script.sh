@@ -1,4 +1,6 @@
 #!/bin/bash
+#SBATCH --output=python.%j.out
+#SBATCH --error=python.%j.err
 #SBATCH --account=deep_rc_mem
 #SBATCH --partition=normal_q
 #SBATCH --nodes=1
@@ -11,8 +13,8 @@
 
 export OMP_NUM_THREADS=4
 
-srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --dataset=ECG5000 --epochs=5 --is_all_combs=1 &
-srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --dataset=FORDA --epochs=5 --is_all_combs=1 &
-srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --dataset=FORDB --epochs=5 --is_all_combs=1 &
-srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --dataset=WAFER --epochs=5 --is_all_combs=1 &
-srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --dataset=EQUAKES --epochs=5 --is_all_combs=1 &
+srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --model="all" --dataset=ECG5000 --epochs=5 --is_all_combs=1 &
+srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --model="all" --dataset=FORDA --epochs=5 --is_all_combs=1 &
+srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --model="all" --dataset=FORDB --epochs=5 --is_all_combs=1 &
+srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --model="all" --dataset=WAFER --epochs=5 --is_all_combs=1 &
+srun --exclusive -n 1 -c 1 python -m tools.train_eval_all.py --model="all" --dataset=EQUAKES --epochs=5 --is_all_combs=1 &
