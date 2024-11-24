@@ -1,0 +1,9 @@
+matplotlib==3.9.2
+nengo==4.0.0
+nengo_loihi==1.1.0
+numpy==1.23.5
+pandas==2.2.3
+pyJoules==0.5.1
+scikit_learn==1.5.2
+scipy==1.14.1
+torch==2.5.1
