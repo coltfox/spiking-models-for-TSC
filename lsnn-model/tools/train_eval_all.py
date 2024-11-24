@@ -14,7 +14,11 @@ OTP_DIR = f"{BASE_DIR}/results/"
 DATASETS = ["ECG5000", "FORDA", "FORDB", "WAFER", "EQUAKES"]
 MODELS = ["LSNN", "BW_NSPK", "LSNN_NHDN"]
 
-def train_eval_all(model, dataset, epochs, use_all_combs):
+def train_eval_all_models(dataset, epochs, use_all_combs=False):
+   for model in MODELS:
+      train_eval_all(model, dataset, epochs, use_all_combs)
+
+def train_eval_all(model, dataset, epochs, use_all_combs=False):
     # Don't need to save any files
     otp_dir = f"{OTP_DIR}/{dataset}-{model}/"
     os.makedirs(otp_dir, exist_ok=True)
@@ -153,4 +157,7 @@ parser.add_argument("--is_all_combs", type=int, required=False, choices=[0, 1],
 
 args = parser.parse_args()
 
-train_eval_all(args.model, args.dataset, args.epochs, args.is_all_combs)
+if args.model == "all":
+    train_eval_all_models(args.dataset, args.epochs, args.is_all_combs)
+else:
+    train_eval_all(args.model, args.dataset, args.epochs, args.is_all_combs)
