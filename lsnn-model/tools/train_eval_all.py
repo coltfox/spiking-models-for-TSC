@@ -22,7 +22,7 @@ def train_eval_all(model, dataset, epochs, use_all_combs=False):
     # Don't need to save any files
     otp_dir = f"{OTP_DIR}/{dataset}-{model}/"
     os.makedirs(otp_dir, exist_ok=True)
-    setup_logging(otp_dir)
+    setup_logging(otp_dir, model, dataset)
 
     max_acc, avg_acc = 0.0, 0.0
 
@@ -40,11 +40,15 @@ def train_eval_all(model, dataset, epochs, use_all_combs=False):
 
 def call_all_combs(otp_dir, dataset, epochs):
     exu = ExpUtils()
-
-    if ("NSPK" in RTC.PYTORCH_MODEL_NAME):
-        return call_all_combs_nspk(exu, otp_dir, dataset, epochs)
     
-    return call_all_combs_lsnn(exu, otp_dir, dataset, epochs)
+    for seed in [6, 9, 100]:
+        log.INFO(f"Running experiments on seed {seed}")
+        RTC.SEED = seed
+        
+        if ("NSPK" in RTC.PYTORCH_MODEL_NAME):
+            return call_all_combs_nspk(exu, otp_dir, dataset, epochs)
+        
+        return call_all_combs_lsnn(exu, otp_dir, dataset, epochs)
 
 def call_all_combs_lsnn(exu, otp_dir, dataset, epochs):
     accuracies = []
@@ -114,10 +118,8 @@ def cleanup_sigs(otp_dir):
     os.remove(otp_dir+"/train_X_ldn_sigs.p")
     os.remove(otp_dir+"/train_Y.p")
 
-def setup_logging(otp_dir):
-  log.configure_log_handler(
-      "%s/pytorch_training_evaluation_%s_%s.log"
-      % (otp_dir, RTC.PYTORCH_MODEL_NAME, ExpUtils().get_timestamp()))
+def setup_logging(otp_dir, model, dataset):
+  log.configure_log_handler(f"{otp_dir}/{model}-{dataset}-train-eval-{ExpUtils().get_timestamp()}")
   keys = list(vars(RTC).keys())
   log.INFO("#"*30 + " C O N F I G " + "#"*30)
   for key in keys:
@@ -125,27 +127,40 @@ def setup_logging(otp_dir):
   log.INFO("#"*70)
 
 def configure_constants(model, dataset):
-    """Set the correct runtime constants for the dataset"""
+    """Set the correct runtime and experiment constants for the dataset"""
 
     RTC.PYTORCH_MODEL_NAME = model
+    
+    if dataset in ["ECG5000", "WAFER"]:
+        EXC.PYTORCH_NEURON_GAIN_LST = [1, 2, 4]
+        EXC.PYTORCH_NEURON_BIAS_LST = [0, 0.5]
+        EXC.PYTORCH_TAU_CUR_LST = [5e-3, 10e-3, 15e-3]
+        EXC.PYTORCH_TAU_VOL_LST = [10e-3, 20e-3, 30e-3]
+        EXC.PYTORCH_VOL_THR_LST = [1, 1.5]
+        EXC.PYTORCH_LR_LST = [0.01, 0.05, 0.005]
+    elif dataset in ["EQUAKES", "FORDA", "FORDB"]:
+        EXC.PYTORCH_NEURON_GAIN_LST = [2, 4]
+        EXC.PYTORCH_NEURON_BIAS_LST = [0, 0.5]
+        EXC.PYTORCH_TAU_CUR_LST = [5e-3, 10e-3]
+        EXC.PYTORCH_TAU_VOL_LST = [20e-3, 30e-3]
+        EXC.PYTORCH_VOL_THR_LST = [1, 1.5]
+        EXC.PYTORCH_LR_LST = [0.01, 0.005]
 
-    if model == "ECG5000":
-       RTC.TEST_EVAL_SIZE = 4500
-       RTC.BATCH_SIZE = 50
-    elif model == "FORDA":
-       RTC.TEST_EVAL_SIZE = 1320
-       RTC.BATCH_SIZE = 40
-    elif model == "FORDB":
-       RTC.TEST_EVAL_SIZE = 810
-       RTC.BATCH_SIZE = 18
-    elif model == "WAFER":
-       RTC.TEST_EVAL_SIZE = 6150
-       RTC.BATCH_SIZE = 50
-    elif model == "EQUAKES":
-       RTC.TEST_EVAL_SIZE = 138
-       RTC.BATCH_SIZE = 23
-
-
+    if dataset == "ECG5000":
+        RTC.TEST_EVAL_SIZE = 4500
+        RTC.BATCH_SIZE = 50
+    elif dataset == "FORDA":
+        RTC.TEST_EVAL_SIZE = 1320
+        RTC.BATCH_SIZE = 40
+    elif dataset == "FORDB":
+        RTC.TEST_EVAL_SIZE = 810
+        RTC.BATCH_SIZE = 18
+    elif dataset == "WAFER":
+        RTC.TEST_EVAL_SIZE = 6150
+        RTC.BATCH_SIZE = 50
+    elif dataset == "EQUAKES":
+        RTC.TEST_EVAL_SIZE = 138
+        RTC.BATCH_SIZE = 23
 
 
 parser = argparse.ArgumentParser()

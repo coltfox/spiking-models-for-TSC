@@ -84,7 +84,7 @@ class HiddenLayer(torch.nn.Module):
         n_hidden, n_previous, dtype=self._dtype).normal_(
         mean=0.0, std=EXC.WEIGHT_SCALE/np.sqrt(n_previous),
         generator=self._exu.get_pytorch_seed()) # Transpose the dims.
-    log.INFO("Initial Hidden Wts: {}".format(self._fc.weight.data))
+    # log.INFO("Initial Hidden Wts: {}".format(self._fc.weight.data))
 
   def reset_states(self):
     """

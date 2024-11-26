@@ -2,7 +2,8 @@ from . import _init_paths
 from consts.exp_consts import EXC
 
 BASE_DIR = "/home/cfox/Documents/spiking-models-for-TSC"
-RESULTS_DIR = BASE_DIR + "/ExpResults/final_results/LSNN/ECG5000/seed_9/results/"
+# RESULTS_DIR = BASE_DIR + "/ExpResults/final_results/LSNN/ECG5000/seed_9/results/"
+RESULTS_DIR = f"{BASE_DIR}/results/"
 DATA_DIR = BASE_DIR + "/lsnn-model/data/"
 
 class DRC(object):
