@@ -12,8 +12,8 @@
 export OMP_NUM_THREADS=12
 
 python -m tools.train_eval --model="all" --dataset=ECG5000 --epochs=50 --num_cores=12
-# python -m tools.train_eval --model="all" --dataset=WAFER --epochs=50 --num_cores=12
-# python -m tools.train_eval --model="all" --dataset=FORDA --epochs=250 --num_cores=12
-# python -m tools.train_eval --model="all" --dataset=FORDB --epochs=250 --num_cores=12
-# python -m tools.train_eval --model="all" --dataset=EQUAKES --epochs=250 --num_cores=12
+python -m tools.train_eval --model="all" --dataset=WAFER --epochs=50 --num_cores=12
+python -m tools.train_eval --model="all" --dataset=FORDA --epochs=250 --num_cores=12
+python -m tools.train_eval --model="all" --dataset=FORDB --epochs=250 --num_cores=12
+python -m tools.train_eval --model="all" --dataset=EQUAKES --epochs=250 --num_cores=12
 
